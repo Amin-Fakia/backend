@@ -34,7 +34,9 @@ const db = new sqlite3.Database('./events.db', (err) => {
         db.run(`CREATE TABLE IF NOT EXISTS objects (
             object_id INTEGER PRIMARY KEY AUTOINCREMENT,
             object_name TEXT,
-            ausgeliehen BOOLEAN
+            imLager BOOLEAN,
+            categorie TEXT,
+            beschreibung TEXT
         )`, (err) => {
             if (err) {
                 console.error('Error creating objects table:', err.message);

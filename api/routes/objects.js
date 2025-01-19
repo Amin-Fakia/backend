@@ -16,20 +16,24 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const { object_name, ausgeliehen } = req.body;
-    db.run(`INSERT INTO objects (object_name, ausgeliehen) VALUES (?, ?)`,
-        [object_name, ausgeliehen],
-        function (err) {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.status(201).json({
-                message: "Handling POST requests to /objects",
-                object_id: this.lastID
-            });
+    const { object_name, imLager, categorie, beschreibung } = req.body;
+    db.run(`INSERT INTO objects (object_name, imLager, categorie, beschreibung) VALUES (?, ?, ?, ?)`,
+      [object_name, imLager, categorie, beschreibung],
+      function (err) {
+        if (err) {
+          res.status(500).json({ error: err.message });
+          return;
+        }
+        const objectId = this.lastID;
+        db.get(`SELECT * FROM objects WHERE object_id = ?`, [objectId], (err, row) => {
+          if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+          }
+          res.status(201).json(row);
         });
-});
+      });
+  });
 
 router.get('/:objectId', (req, res, next) => {
     const id = req.params.objectId;
@@ -53,19 +57,28 @@ router.get('/:objectId', (req, res, next) => {
 
 router.patch('/:objectId', (req, res, next) => {
     const id = req.params.objectId;
-    const { object_name, ausgeliehen } = req.body;
-    db.run(`UPDATE objects SET object_name = ?, ausgeliehen = ? WHERE object_id = ?`,
-        [object_name, ausgeliehen, id],
-        function (err) {
-            if (err) {
-                res.status(500).json({ error: err.message });
-                return;
-            }
-            res.status(200).json({
-                message: "Updated object",
-                changes: this.changes
-            });
+    const fields = req.body;
+    const keys = Object.keys(fields);
+    const values = Object.values(fields);
+
+    if (keys.length === 0) {
+        res.status(400).json({ error: "No fields to update" });
+        return;
+    }
+
+    const setClause = keys.map(key => `${key} = ?`).join(', ');
+    const sql = `UPDATE objects SET ${setClause} WHERE object_id = ?`;
+
+    db.run(sql, [...values, id], function (err) {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.status(200).json({
+            message: "Updated object",
+            changes: this.changes
         });
+    });
 });
 
 router.delete('/:objectId', (req, res, next) => {
