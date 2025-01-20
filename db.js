@@ -36,7 +36,8 @@ const db = new sqlite3.Database('./events.db', (err) => {
             object_name TEXT,
             imLager BOOLEAN,
             categorie TEXT,
-            beschreibung TEXT
+            beschreibung TEXT,
+            assignedEvent TEXT
         )`, (err) => {
             if (err) {
                 console.error('Error creating objects table:', err.message);

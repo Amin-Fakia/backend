@@ -16,9 +16,9 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const { object_name, imLager, categorie, beschreibung } = req.body;
-    db.run(`INSERT INTO objects (object_name, imLager, categorie, beschreibung) VALUES (?, ?, ?, ?)`,
-      [object_name, imLager, categorie, beschreibung],
+    const { object_name, imLager, categorie, beschreibung, assignedEvent} = req.body;
+    db.run(`INSERT INTO objects (object_name, imLager, categorie, beschreibung, assignedEvent) VALUES (?, ?, ?, ?, ?)`,
+      [object_name, imLager, categorie, beschreibung, assignedEvent],
       function (err) {
         if (err) {
           res.status(500).json({ error: err.message });

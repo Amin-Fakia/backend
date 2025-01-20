@@ -53,9 +53,9 @@ router.get('/:eventId', (req, res, next) => {
 
 router.patch('/:eventId', (req, res, next) => {
     const id = req.params.eventId;
-    const { event_name, from_date, until_date } = req.body;
-    db.run(`UPDATE events SET event_name = ?, from_date = ?, until_date = ? WHERE event_id = ?`,
-        [event_name, from_date, until_date, id],
+    const { event_name, from_date, until_date, assignedEvent } = req.body;
+    db.run(`UPDATE events SET event_name = ?, from_date = ?, until_date = ?, assignedEvent = ? WHERE event_id = ?`,
+        [event_name, from_date, until_date, id, assignedEvent],
         function (err) {
             if (err) {
                 res.status(500).json({ error: err.message });
@@ -67,7 +67,22 @@ router.patch('/:eventId', (req, res, next) => {
             });
         });
 });
-
+router.put('/:eventId', (req, res, next) => {
+    const id = req.params.eventId;
+    const { event_name, from_date, until_date, assignedEvent } = req.body;
+    db.run(`UPDATE events SET event_name = ?, from_date = ?, until_date = ?, assignedEvent = ? WHERE event_id = ?`,
+        [event_name, from_date, until_date, id, assignedEvent],
+        function (err) {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            res.status(200).json({
+                message: "Updated event",
+                changes: this.changes
+            });
+        });
+})
 router.delete('/:eventId', (req, res, next) => {
     const id = req.params.eventId;
     db.run('DELETE FROM events WHERE event_id = ?', [id], function (err) {
