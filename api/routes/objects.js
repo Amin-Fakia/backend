@@ -79,6 +79,7 @@ router.patch('/:objectId', (req, res, next) => {
             changes: this.changes
         });
     });
+    
 });
 
 router.delete('/:objectId', (req, res, next) => {

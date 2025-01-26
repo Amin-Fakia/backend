@@ -9,7 +9,11 @@ const db = new sqlite3.Database('./events.db', (err) => {
             event_id INTEGER PRIMARY KEY AUTOINCREMENT,
             event_name TEXT,
             from_date TEXT,
-            until_date TEXT
+            until_date TEXT,
+            location TEXT,
+            beschreibung TEXT,
+            notizen TEXT
+
         )`, (err) => {
             if (err) {
                 console.error('Error creating events table:', err.message);
@@ -21,8 +25,10 @@ const db = new sqlite3.Database('./events.db', (err) => {
         db.run(`CREATE TABLE IF NOT EXISTS people (
             person_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
-            age INTEGER,
-            email TEXT
+            email TEXT,
+            phone TEXT,
+            assignedEvent TEXT,
+            notizen TEXT
         )`, (err) => {
             if (err) {
                 console.error('Error creating people table:', err.message);
@@ -37,7 +43,9 @@ const db = new sqlite3.Database('./events.db', (err) => {
             imLager BOOLEAN,
             categorie TEXT,
             beschreibung TEXT,
-            assignedEvent TEXT
+            assignedEvent TEXT,
+            assignedEventID INTEGER,
+            notizen TEXT
         )`, (err) => {
             if (err) {
                 console.error('Error creating objects table:', err.message);
