@@ -12,7 +12,8 @@ const db = new sqlite3.Database('./events.db', (err) => {
             until_date TEXT,
             location TEXT,
             beschreibung TEXT,
-            notizen TEXT
+            notizen TEXT,
+            color TEXT,
 
         )`, (err) => {
             if (err) {
