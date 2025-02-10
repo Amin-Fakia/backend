@@ -16,9 +16,9 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const { name, age, email } = req.body;
-    db.run(`INSERT INTO people (name, age, email) VALUES (?, ?, ?)`,
-        [name, age, email],
+    const { name, phone, email } = req.body;
+    db.run(`INSERT INTO people (name, phone, email) VALUES (?, ?, ?)`,
+        [name, phone, email],
         function (err) {
             if (err) {
                 res.status(500).json({ error: err.message });
