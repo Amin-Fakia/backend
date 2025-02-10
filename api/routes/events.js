@@ -16,9 +16,9 @@ router.get('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-    const { event_name, from_date, until_date } = req.body;
-    db.run(`INSERT INTO events (event_name, from_date, until_date) VALUES (?, ?, ?)`,
-        [event_name, from_date, until_date],
+    const { event_name, from_date, until_date, location, beschreibung, notizen, color } = req.body;
+    db.run(`INSERT INTO events (event_name, from_date, until_date, location, beschreibung, notizen, color) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [event_name, from_date, until_date, location, beschreibung, notizen, color],
         function (err) {
             if (err) {
                 res.status(500).json({ error: err.message });
